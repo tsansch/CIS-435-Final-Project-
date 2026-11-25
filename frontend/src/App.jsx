@@ -1,11 +1,13 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
+import Signup from "./pages/Signup";
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [showSignup, setShowSignup] = useState(false);
+  
   async function fetchPosts() {
     const { data, error } = await supabase
       .from("posts")
@@ -30,6 +32,10 @@ function App() {
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  if (showSignup) {
+  return <Signup />;
+  }
 
   return (
     <div style={{
