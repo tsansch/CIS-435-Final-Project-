@@ -46,7 +46,9 @@ function App() {
     }}>
       <h1>Forum Board</h1>
       <p>Share your thoughts with the community.</p>
-
+        <button onClick={() => setShowSignup(true)}>
+        Sign Up
+      </button>
       <hr />
 
       {loading ? (
