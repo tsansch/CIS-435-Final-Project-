@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 import Signup from "./pages/Signup";
@@ -6,7 +5,24 @@ import Signup from "./pages/Signup";
 function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showSignup, setShowSignup] = useState(false);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  
+  function navigate(path) {
+  window.history.pushState({}, "", path);
+  setCurrentPath(path);
+}
+
+useEffect(() => {
+  function handlePopState() {
+    setCurrentPath(window.location.pathname);
+  }
+
+  window.addEventListener("popstate", handlePopState);
+
+  return () => {
+    window.removeEventListener("popstate", handlePopState);
+  };
+}, []);
   
   async function fetchPosts() {
     const { data, error } = await supabase
@@ -33,8 +49,8 @@ function App() {
     fetchPosts();
   }, []);
 
-  if (showSignup) {
-  return <Signup />;
+  if (currentPath === "/signup") {
+    return <Signup />;
   }
 
   return (
@@ -46,7 +62,7 @@ function App() {
     }}>
       <h1>Forum Board</h1>
       <p>Share your thoughts with the community.</p>
-        <button onClick={() => setShowSignup(true)}>
+        <button onClick={() => navigate("/signup")}>
         Sign Up
       </button>
       <hr />
